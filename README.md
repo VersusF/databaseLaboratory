@@ -21,15 +21,20 @@ Le transazioni non devono interferire l'una con l'altra, quindi è opportuno man
 In sql l'istruzione per selezionare il livello di isolamento è:
 
 ```SQL
-SET TRANSACTION ISOLATION LEVEL [...]
+BEGIN
+SET TRANSACTION ISOLATION LEVEL [...];
+```
+Oppure in modo compatto
+```SQL
+BEGIN TRANSACTION ISOLATION LEVEL [...];
 ```
 
-Il livello **__`READ COMMITTED`__** vede tutti i dati aggiornati all'ultimo `COMMIT`, per questo motivo soffre di due anomalie. La prima è la **non-repeatable reads**, Cioè quando un'operazione che dovrebbe essere fatta viene annullata poiché le tuple interessate sono state modificate da un'altra transazione.
-La seconda anomalia è il **phantom reads**, che avviene quando vengono effettuate due letture identiche fra loro ma che danno due risultati diversi poiché inframezzati dal commit di un'altra transazione.
+Il livello **__`READ COMMITTED`__** vede tutti i dati aggiornati all'ultimo `COMMIT`, per questo motivo soffre di due anomalie. La prima è la **non-repeatable reads**, cioè quando faccio due letture uguali ma con risultati diversi su una stessa tupla. Potrebbe succedere che viene lanciato un comando, poi avviene un commit, lui rilegge solo le tuple selezionate e aggiorna le modifiche committate.
+La seconda anomalia è il **phantom reads**, che avviene quando tra due letture viene fatto un inserimento che non viene riletto, poiché dopo l'attesa vengono rilette solo le tuple già selezionate.
 
-Il livello **__`REPEATABLE READ`__** invece garantisce che due letture identiche diano risultati identici. Se su un dato è stato aggiornato e viene eseguito il commit l'operazione che lo voleva modificare (`UPDATE` o `DELETE`) viene bloccata con un messaggio di errore. Questo blocca i *non-repatable reads*, ma mantiene i **phantom-reads** nei casi in cui c'è un `INSERT` con `SELECT`. (Se invece c'è un `UPDATE` con `SELECT` questo livello di isolamento è sufficiente)
+Il livello **__`REPEATABLE READ`__** invece garantisce che due letture identiche diano risultati identici. Se leggo un dato in uso da un'altra transazione si mette in attesa; in caso di commit rilegge tutti i dati selezionati: se sono diversi abortisce, altrimenti prosegue. Questo blocca i *non-repatable reads*, ma mantiene i **phantom-reads** nei casi in cui c'è un `INSERT` con `SELECT`, che prevede una rilettura in caso di attesa. (Se invece c'è un `UPDATE` con `SELECT` questo livello di isolamento è sufficiente)
 
-Il livello **__`SERIALIZABLE`__** garantisce il completo e massimo isolamento tra le transazioni. Corregge anche l'anomalia di *phantom-reads*, ma alcune transazioni potrebbero venir bloccate e quindi devono essere ripetute. 
+Il livello **__`SERIALIZABLE`__** garantisce il completo e massimo isolamento tra le transazioni. Corregge anche l'anomalia di *phantom-reads*, ma alcune transazioni potrebbero venire abortite e quindi devono essere ripetute. 
 
 Livello-Concorrenza | non-repeatable reads | phantom reads
 --- | --- | ---
