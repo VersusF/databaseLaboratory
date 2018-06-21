@@ -3,12 +3,12 @@
 Piccolo file di appunti per l'esame di basi di dati laboratorio. Gli argomenti sono:
 
 - [Transazioni](#transazioni)
-- [Python: json e csv](#python:-json-e-csv)
-- [Python: psycopg2](#python:-psycopg2)
-- [Python: Flask](#python:-Flask)
-- [HTML: Jinja2](#HTML:-Jinja2)
-- [HTML: Form](#HTML:-Form)
-- [Java: JDBC](#java:-JDBC)
+- [Python: json e csv](#python-json-e-csv)
+- [Python: psycopg2](#python-psycopg2)
+- [Python: Flask](#python-flask)
+- [HTML: Jinja2](#html-jinja2)
+- [HTML: Form](#html-form)
+- [Java: JDBC](#java-jdbc)
 
 ## Transazioni
 
