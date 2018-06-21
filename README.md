@@ -175,11 +175,17 @@ Le form in HTML sono il costrutto ideale per inviare dati alle pagine Flask con 
 
 Esempio:
 ```HTML
+
 <form action="/targetPage" method="POST">
     <input type="text" name="testo1">
     <input type="number" name="numero">
     <input tyoe="date" name="data">
     <input type="text" name="targa" pattern="[A-Z]{2}\d{3}[A-Z]{2}">
+    <select name="opzoni">
+        <option value="valoreRitornato">Valore Visualizzato</option>
+        <option value="valoreRitornato1">Valore Visualizzato1</option>
+        <option value="valoreRitornato2">Valore Visualizzato2</option>
+    </select>
     <input type="submit" value="Conferma">
 </form>
 ```
