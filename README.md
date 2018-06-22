@@ -75,7 +75,7 @@ class PersonEncoder(json.JSONEncoder):
         return {'name': o.name}
 
 my_person = Person('Filippo')
-with oper('myFile.json', 'w') as f:
+with open('myFile.json', 'w') as f:
     json.dump(f, my_person, cls=PersonEncoder)
 ```
 
@@ -112,7 +112,7 @@ with open('myFile.csv', 'r') as f:
 
 psycopg2 è una libreria per python per accedere al dbms di postgresql tramite cursore. L'accesso al database si ha tramite l'oggetto `Connection`, a cui bisogna fornire host, database, user, password. Dellla connessione è possibile modificare i campi `autocommit` e `isolation_level`. Per aprire una tranzazione basta usare l'oggetto connessione in un blocco `with`, al termine del quale viene eseguito un commit. Quando la connessione non è più necessaria la si chiude col metodo `close()`.
 
-Per eseguire istruzioni SQL si usa il metodo `cursor()`, che restituisce un oggetto cursore col quale inviare comandi e ricevere risposte. Per l'invio di un comando si usa `execute(string, tuple)`, in cui la stringa è l'istruzione SQL, in cui ci possono essere dei segnaposti (marcati con `%`) che vengono sostituiti dai valori nella tupla facendo l'escaping automatico. **Mai creare l'istruzione concatenando stringhe**. Dopo aver lanciato un comando di query il cursore diventa un iterabile sulle tuple del risultato. Se invece l'istruzione è di un altro tipo il messaggio di risposta è presente nel campo `statusmessage` del cursore. E' consigliabile usare i cursori dentro ai blocchi `with`. Se alla creazione del cursore si può impostare `cursor_factory=psycopg2.extras.DictCursor` come parametro, così da avere la risposta alla query come un iteratore di dizionari
+Per eseguire istruzioni SQL si usa il metodo `cursor()`, che restituisce un oggetto cursore col quale inviare comandi e ricevere risposte. Per l'invio di un comando si usa `execute(string, tuple)`, in cui la stringa è l'istruzione SQL, in cui ci possono essere dei segnaposti (marcati con `%s`) che vengono sostituiti dai valori nella tupla facendo l'escaping automatico. **Mai creare l'istruzione concatenando stringhe**. Dopo aver lanciato un comando di query il cursore diventa un iterabile sulle tuple del risultato. Se invece l'istruzione è di un altro tipo il messaggio di risposta è presente nel campo `statusmessage` del cursore. E' consigliabile usare i cursori dentro ai blocchi `with`. Alla creazione del cursore si può impostare `cursor_factory=psycopg2.extras.DictCursor` come parametro, così da avere la risposta alla query come un iteratore di dizionari
 
 ```python 3
 import psycopg2
